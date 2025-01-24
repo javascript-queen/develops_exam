@@ -1,0 +1,16 @@
+- name: Deploy traylor_task_5 application with Docker
+  hosts: remote_servers
+  become: true
+
+  tasks:
+    - name: Copy application files to the server
+      copy:
+        src: ./
+        dest: /home/{{ ansible_user }}/traylor_task_5/
+        remote_src: no
+
+    - name: Build Docker image on the server
+      command: docker build -t traylor_task_5 /home/{{ ansible_user }}/traylor_task_5/
+
+    - name: Run Docker container
+      command: docker run -d -p 5001:5000 --name traylor_task_5_container traylor_task_5
